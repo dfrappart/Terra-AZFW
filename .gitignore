@@ -1,0 +1,16 @@
+AzureDFProvider.tf
+AzureDFProviderSecret.tfold
+AzureDFProviderSecret.tf
+AzureDFProvider.tfold
+AzureDVTProviderSecret.tf
+AzureDVTProviderSecret.tfold
+AzurePreviewProvider.tf
+AzurePreviewProvider.tfold
+variables.tf
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate*
+.terraform/
+Source/
+Output.tfold
+*.tfold

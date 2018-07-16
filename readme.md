@@ -1,0 +1,1 @@
+#This template deploys a simple VNet archi with Subnet and Endpoint and adds an AZ firewall in JSON
