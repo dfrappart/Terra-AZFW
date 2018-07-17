@@ -56,16 +56,16 @@ module "AllowHDInsightHealthIn" {
 }
 */
 
-data "template_file" "customscripttemplateAZFW" {
+data "template_file" "templateAZFW" {
   template = "${file("./Templates/templateazfw.json")}"
 }
 
 /*
-resource "azurerm_template_deployment" "Template-LambdaSpark" {
+resource "azurerm_template_deployment" "Template-AZFW" {
   name                = "terraclustersparktemplate"
   resource_group_name = "${module.ResourceGroupHDI.Name}"
 
-  template_body = "${data.template_file.customscripttemplateHDISpark.rendered}"
+  template_body = "${data.template_file.templateAZFW.rendered}"
 
   parameters {
     "location"              = "${var.AzureRegion}"

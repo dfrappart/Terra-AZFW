@@ -33,17 +33,6 @@ module "ResourceGroupInfra" {
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "ResourceGroupFW" {
-  #Module Location
-  source = "./Modules/01 ResourceGroup"
-
-  #Module variable
-  RGName              = "${var.RGName}-${var.EnvironmentUsageTag}${var.EnvironmentTag}-FW"
-  RGLocation          = "${var.AzureRegion}"
-  EnvironmentTag      = "${var.EnvironmentTag}"
-  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
-}
-
 # Creating vNET
 
 module "SampleArchi_vNet" {

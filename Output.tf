@@ -14,17 +14,6 @@ output "ResourceGroupInfraId" {
 }
 
 ######################################################
-# Resource group info Output
-
-output "ResourceGroupFWName" {
-  value = "${module.ResourceGroupFW.Name}"
-}
-
-output "ResourceGroupFWId" {
-  value = "${module.ResourceGroupFW.Id}"
-}
-
-######################################################
 # vNet info Output
 
 output "vNetName" {

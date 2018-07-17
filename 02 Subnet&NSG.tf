@@ -37,6 +37,7 @@ module "Bastion_Subnet" {
   vNetName            = "${module.SampleArchi_vNet.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 2)}"
   NSGid               = "${module.NSG_Bastion_Subnet.Id}"
+  SVCEP               = ["Microsoft.KeyVault"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
@@ -71,6 +72,7 @@ module "FE_Subnet" {
   vNetName            = "${module.SampleArchi_vNet.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 0)}"
   NSGid               = "${module.NSG_FE_Subnet.Id}"
+  SVCEP               = ["Microsoft.Storage", "Microsoft.Sql"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
@@ -105,6 +107,7 @@ module "BE_Subnet" {
   vNetName            = "${module.SampleArchi_vNet.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 1)}"
   NSGid               = "${module.NSG_BE_Subnet.Id}"
+  SVCEP               = ["Microsoft.AzureCosmosDB"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
