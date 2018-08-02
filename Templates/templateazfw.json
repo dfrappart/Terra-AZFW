@@ -33,6 +33,12 @@
               "description": "Subnet in which resides the AZ FW"
             }
           },
+        "FESubnetRange": {
+          "type": "string",
+          "metadata": {
+            "description": "Subnet FrontEnd protected by the AZ FW"
+          }
+        },
         "aZFWPublicIpId": {
             "type": "string",
             "metadata": {
@@ -46,10 +52,6 @@
             "type": "Microsoft.Network/azureFirewalls",
             "name": "[parameters('aZFWName')]",
             "location": "[parameters('location')]",
-            "dependsOn": [
-              "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-              "[concat('Microsoft.Network/publicIPAddresses/', parameters('aZFWPublicIPName'))]"
-            ],
             "properties": {
               "ipConfigurations": [
                 {
@@ -82,15 +84,15 @@
               ],
               "networkRuleCollections": [
                 {
-                  "name": "netRc1",
+                  "name": "FERulesCollection",
                   "properties": {                    
                     "priority": 200,
                     "action":  { "type":  "Allow"},
                     "rules": [
                       {
-                        "name": "netRule1",
+                        "name": "FERule1",
                         "protocols": ["TCP"],
-                        "sourceAddresses": ["192.168.2.0/24"],
+                        "sourceAddresses": ["parameters('FESubnetRange')"],
                         "destinationAddresses": ["*"],
                         "destinationPorts": ["8000-8999"]
                       }

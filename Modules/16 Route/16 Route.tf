@@ -52,13 +52,13 @@ resource "azurerm_route" "TerraRoute" {
 #Output
 
 output "Name" {
-  value = "${azurerm_route_table.TerraRoute.name}"
+  value = "${azurerm_route.TerraRoute.name}"
 }
 
 output "Id" {
-  value = "${azurerm_route_table.TerraRoute.id}"
+  value = "${azurerm_route.TerraRoute.id}"
 }
 
 output "RGName" {
-  value = "${azurerm_route_table.TerraRoute.resource_group_name}"
+  value = "${azurerm_route.TerraRoute.resource_group_name}"
 }

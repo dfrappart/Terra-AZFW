@@ -77,9 +77,9 @@ resource "azurerm_template_deployment" "Template-AZFW" {
   parameters {
     "location"           = "${var.AzureRegion}"
     "virtualNetworkName" = "${module.SampleArchi_vNet.Name}"
-    "aZFWPublicIPName"   = ""
-    "aZFWSubnetId"       = ""
-    "aZFWPublicIpId"     = ""
+    "aZFWPublicIPName"   = "${element(module.FW_PIP.Names,0)}"
+    "aZFWSubnetId"       = "${module.FW_Subnet.Id}"
+    "aZFWPublicIpId"     = "${element(module.FW_PIP.Ids,0)}"
   }
 
   deployment_mode = "Incremental"

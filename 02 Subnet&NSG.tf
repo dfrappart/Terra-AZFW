@@ -71,6 +71,7 @@ module "FE_Subnet" {
   vNetName            = "${module.SampleArchi_vNet.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 0)}"
   NSGid               = "${module.NSG_FE_Subnet.Id}"
+  RouteTableId        = "${module.RouteTable.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
