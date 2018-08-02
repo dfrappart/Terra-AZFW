@@ -75,38 +75,6 @@ module "LogStorageContainer" {
   AccessType           = "private"
 }
 
-/*
-
-#Creating Storage Account for HDI
-
-module "HDIStorageAccount" {
-  #Module location
-  source = "./Modules/03 StorageAccountGP"
-
-  #Module variable
-  StorageAccountName     = "${var.EnvironmentTag}hdi"
-  RGName                 = "${module.ResourceGroupInfra.Name}"
-  StorageAccountLocation = "${var.AzureRegion}"
-  StorageAccountTier     = "${lookup(var.storageaccounttier, 0)}"
-  StorageReplicationType = "${lookup(var.storagereplicationtype, 0)}"
-  EnvironmentTag         = "${var.EnvironmentTag}"
-  EnvironmentUsageTag    = "${var.EnvironmentUsageTag}"
-}
-
-module "HDIStorageContainer" {
-  #Module location
-  source = "./Modules/04 StorageAccountContainer"
-
-  #Module variable
-  StorageContainerName = "hdi"
-  RGName               = "${module.ResourceGroupInfra.Name}"
-  StorageAccountName   = "${module.DiagStorageAccount.Name}"
-  AccessType           = "private"
-}
-
-
-*/
-
 #Creating Storage Account for files exchange
 
 module "FilesExchangeStorageAccount" {
@@ -135,36 +103,3 @@ module "InfraFileShare" {
   StorageAccountName = "${module.FilesExchangeStorageAccount.Name}"
   Quota              = "0"
 }
-
-/*
-module "Keyvault" {
-  #Module location
-
-  source = "./Modules/01 Keyvault"
-
-  #Module variables
-  KeyVaultName            = "keyvaultdftest"
-  KeyVaultRG              = "${module.ResourceGroup.Name}"
-  KeyVaultObjectIDPolicy2 = "${var.AzureObjectID}"
-  KeyVaultObjectIDPolicy1 = "${var.AzureServicePrincipalInteractive}"
-  KeyVaultTenantID        = "${var.AzureTenantID}"
-  KeyVaultApplicationID   = "${var.AzureApplicationID}"
-  EnvironmentTag          = "${var.EnvironmentTag}"
-  EnvironmentUsageTag     = "${var.EnvironmentUsageTag}"
-}
-
-/*
-module "WinVMPassword" {
-  #Module location
-  source = "./Modules/02 KeyvaultSecret"
-
-  #Module variable
-  PasswordName        = "WinVMPassword"
-  PasswordValue       = "${var.VMAdminPassword}"
-  VaultURI            = "${module.Keyvault.URI}"
-  EnvironmentTag      = "${var.EnvironmentTag}"
-  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
-}
-
-*/
-

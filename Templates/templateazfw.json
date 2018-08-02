@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworkName": {
+          "type": "string",
+          "metadata": {
+            "description": "virtual network name"
+          }
+        },
+        "location": {
+          "type": "string",
+          "metadata": {
+            "description": "Location for all resources."
+          }
+        },
+        "aZFWName": {
+            "type": "string",
+            "defaultValue": "AZFWPoc",
+            "metadata": {
+              "description": "Azure FW Appliance"
+            }
+          },
+        "aZFWPublicIPName": {
+            "type": "string",
+            "metadata": {
+              "description": "Azure FW PIP Name"
+            }
+          },
+        "aZFWSubnetId": {
+            "type": "string",
+            "metadata": {
+              "description": "Subnet in which resides the AZ FW"
+            }
+          },
+        "aZFWPublicIpId": {
+            "type": "string",
+            "metadata": {
+              "description": "Id of the AZ FW PIP"
+            }
+          }
+      },
+    "resources": [
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Network/azureFirewalls",
+            "name": "[parameters('aZFWName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+              "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+              "[concat('Microsoft.Network/publicIPAddresses/', parameters('aZFWPublicIPName'))]"
+            ],
+            "properties": {
+              "ipConfigurations": [
+                {
+                  "name": "IpConf",
+                  "properties" : {
+                    "subnet": {
+                      "id": "[parameters('aZFWSubnetId')]"
+                    },
+                    "InternalPublicIPAddress": {
+                      "id": "[parameters('aZFWPublicIpId')]"
+                    }
+                  }
+                }
+              ],
+              "applicationRuleCollections": [
+                {
+                  "name": "appRc1",
+                  "properties": {
+                    "priority": 101,
+                    "action": {"type": "Allow"},
+                    "rules": [
+                      {
+                        "name": "appRule1",
+                        "protocols": [{"port": "80", "protocolType": "http"}, {"port": "443", "protocolType": "https"}],
+                        "targetUrls": ["*microsoft.com"]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "networkRuleCollections": [
+                {
+                  "name": "netRc1",
+                  "properties": {                    
+                    "priority": 200,
+                    "action":  { "type":  "Allow"},
+                    "rules": [
+                      {
+                        "name": "netRule1",
+                        "protocols": ["TCP"],
+                        "sourceAddresses": ["192.168.2.0/24"],
+                        "destinationAddresses": ["*"],
+                        "destinationPorts": ["8000-8999"]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+    ]
+}

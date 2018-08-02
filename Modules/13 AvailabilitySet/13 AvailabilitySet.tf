@@ -41,7 +41,7 @@ variable "EnvironmentUsageTag" {
 
 # Availability Set Creation
 
-resource "azurerm_availability_set" "Terra-AS" {
+resource "azurerm_availability_set" "TerraAS" {
   name                        = "${var.ASName}"
   location                    = "${var.ASLocation}"
   managed                     = "true"
@@ -57,13 +57,13 @@ resource "azurerm_availability_set" "Terra-AS" {
 #Output
 
 output "Name" {
-  value = "${azurerm_availability_set.Terra-AS.name}"
+  value = "${azurerm_availability_set.TerraAS.name}"
 }
 
 output "Id" {
-  value = "${azurerm_availability_set.Terra-AS.id}"
+  value = "${azurerm_availability_set.TerraAS.id}"
 }
 
 output "RGName" {
-  value = "${azurerm_availability_set.Terra-AS.resource_group_name}"
+  value = "${azurerm_availability_set.TerraAS.resource_group_name}"
 }
