@@ -80,6 +80,7 @@ resource "azurerm_template_deployment" "Template-AZFW" {
     "aZFWPublicIPName"   = "${element(module.FW_PIP.Names,0)}"
     "aZFWSubnetId"       = "${module.FW_Subnet.Id}"
     "aZFWPublicIpId"     = "${element(module.FW_PIP.Ids,0)}"
+    "fESubnetRange"      = "${module.FE_Subnet.AddressPrefix}"
   }
 
   deployment_mode = "Incremental"

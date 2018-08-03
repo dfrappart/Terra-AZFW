@@ -2,12 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualNetworkName": {
-          "type": "string",
-          "metadata": {
-            "description": "virtual network name"
-          }
-        },
         "location": {
           "type": "string",
           "metadata": {
@@ -21,19 +15,13 @@
               "description": "Azure FW Appliance"
             }
           },
-        "aZFWPublicIPName": {
-            "type": "string",
-            "metadata": {
-              "description": "Azure FW PIP Name"
-            }
-          },
         "aZFWSubnetId": {
             "type": "string",
             "metadata": {
               "description": "Subnet in which resides the AZ FW"
             }
           },
-        "FESubnetRange": {
+        "fESubnetRange": {
           "type": "string",
           "metadata": {
             "description": "Subnet FrontEnd protected by the AZ FW"
@@ -92,7 +80,7 @@
                       {
                         "name": "FERule1",
                         "protocols": ["TCP"],
-                        "sourceAddresses": ["parameters('FESubnetRange')"],
+                        "sourceAddresses": ["parameters('fESubnetRange')"],
                         "destinationAddresses": ["*"],
                         "destinationPorts": ["8000-8999"]
                       }
