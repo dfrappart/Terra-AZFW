@@ -165,7 +165,7 @@ module "CustomExtensionWinForFE" {
   AgentName            = "CustomExtensionWinForFE"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
-  VMName               = ["${module.VMs_Bastion.Name}"]
+  VMName               = ["${module.VMs_FE.Name}"]
   EnvironmentTag       = "${var.EnvironmentTag}"
   EnvironmentUsageTag  = "${var.EnvironmentUsageTag}"
   AgentPublisher       = "microsoft.compute"
