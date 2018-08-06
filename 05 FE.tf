@@ -6,7 +6,7 @@
 
 module "AllowHTTPFromInternetFEIn" {
   #Module source
-  source = "./Modules/08 NSGRule with services tags"
+  source = "./Modules/08-2 NSGRule with services tags"
 
   #Module variable
   RGName                          = "${module.ResourceGroupInfra.Name}"
@@ -40,6 +40,24 @@ module "AllowHTTPSFromInternetFEIn" {
   NSGRuleDestinationAddressPrefix = "${lookup(var.SubnetAddressRange, 0)}"
 }
 
+module "Allow8080FromInternettoIISServersIn" {
+  #Module source
+  source = "./Modules/08-3 NSGRule with Dest ASG"
+
+  #Module variable
+  RGName                      = "${module.ResourceGroupInfra.Name}"
+  NSGReference                = "${module.NSG_FE_Subnet.Name}"
+  NSGRuleName                 = "Allow8080FromInternettoIISServersIn"
+  NSGRulePriority             = 103
+  NSGRuleDirection            = "Inbound"
+  NSGRuleAccess               = "Allow"
+  NSGRuleProtocol             = "Tcp"
+  NSGRuleSourcePortRange      = "*"
+  NSGRuleDestinationPortRange = 8080
+  NSGRuleSourceAddressPrefix  = "Internet"
+  NSGRuleDestinationASG       = ["${module.ASG_IISServers.id}"]
+}
+
 #FE public IP Creation
 
 module "FEPublicIP" {
@@ -47,7 +65,6 @@ module "FEPublicIP" {
   source = "./Modules/10 PublicIP"
 
   #Module variables
-  PublicIPCount       = "1"
   PublicIPName        = "fepip"
   PublicIPLocation    = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
@@ -75,16 +92,16 @@ module "AS_FE" {
 module "NICs_FE" {
   #module source
 
-  source = "./Modules/12 NICwithPIPWithCount"
+  source = "./Modules/12-6 NICwithPIPwithCountwithASG"
 
   #Module variables
 
-  NICCount            = "1"
   NICName             = "NIC_FE"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   SubnetId            = "${module.FE_Subnet.Id}"
   PublicIPId          = ["${module.FEPublicIP.Ids}"]
+  ASGIds              = ["${module.ASG_PostGresqlServer.Id}", "${module.ASG_IISServers.Id}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

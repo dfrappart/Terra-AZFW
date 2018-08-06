@@ -38,7 +38,7 @@ variable "PublicIPId" {
 }
 
 variable "NSGId" {
-  type = "list"
+  type = "string"
 }
 
 variable "Primary" {

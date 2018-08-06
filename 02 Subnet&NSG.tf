@@ -115,7 +115,7 @@ module "BE_Subnet" {
 ######################################################################
 
 #ASG for PotGresql Servers
-module "PostGresqlServer" {
+module "ASG_PostGresqlServer" {
   #Module location
   source = "./Modules/07-2 Application Security Group"
 
@@ -129,12 +129,12 @@ module "PostGresqlServer" {
 
 #ASG for IIS Server
 
-module "IIS_Servers" {
+module "ASG_IISServers" {
   #Module location
   source = "./Modules/07-2 Application Security Group"
 
   #Module variables
-  ASGName             = "IIS_Servers"
+  ASGName             = "IISServers"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ASGLocation         = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"

@@ -6,7 +6,7 @@
 
 module "AllowRDPromInternetBastionIn" {
   #Module source
-  source = "./Modules/08 NSGRule with services tags"
+  source = "./Modules/08-2 NSGRule with services tags"
 
   #Module variable
   RGName                          = "${module.ResourceGroupInfra.Name}"
@@ -57,11 +57,10 @@ module "AS_Bastion" {
 module "NICs_Bastion" {
   #module source
 
-  source = "./Modules/12 NICwithPIPWithCount"
+  source = "./Modules/12-1 NICwithPIPWithCount"
 
   #Module variables
 
-  NICCount            = "1"
   NICName             = "NIC_Bastion"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"

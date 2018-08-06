@@ -32,7 +32,7 @@ variable "SubnetId" {
 }
 
 variable "NSGId" {
-  type = "list"
+  type = "string"
 }
 
 #Behind a lb
