@@ -109,3 +109,34 @@ module "BE_Subnet" {
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
+
+######################################################################
+# Application Security Groups
+######################################################################
+
+#ASG for PotGresql Servers
+module "PostGresqlServer" {
+  #Module location
+  source = "./Modules/07-2 Application Security Group"
+
+  #Module variables
+  ASGName             = "PostGresqlServer"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  ASGLocation         = "${var.AzureRegion}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
+#ASG for IIS Server
+
+module "IIS_Servers" {
+  #Module location
+  source = "./Modules/07-2 Application Security Group"
+
+  #Module variables
+  ASGName             = "IIS_Servers"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  ASGLocation         = "${var.AzureRegion}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
