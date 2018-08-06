@@ -33,17 +33,6 @@ module "ResourceGroupInfra" {
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "ResourceGroupAZFW" {
-  #Module Location
-  source = "./Modules/01 ResourceGroup"
-
-  #Module variable
-  RGName              = "${var.RGName}-${var.EnvironmentUsageTag}${var.EnvironmentTag}-AZFW"
-  RGLocation          = "${var.AzureRegion}"
-  EnvironmentTag      = "${var.EnvironmentTag}"
-  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
-}
-
 # Creating vNET
 
 module "SampleArchi_vNet" {
@@ -112,5 +101,4 @@ module "InfraFileShare" {
   ShareName          = "infrafileshare"
   RGName             = "${module.ResourceGroupInfra.Name}"
   StorageAccountName = "${module.FilesExchangeStorageAccount.Name}"
-  Quota              = "0"
 }

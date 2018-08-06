@@ -29,7 +29,7 @@ module "NSG_Bastion_Subnet" {
 
 module "Bastion_Subnet" {
   #Module location
-  source = "./Modules/06 - 1 Subnet"
+  source = "./Modules/06-1 Subnet"
 
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 2)}"
@@ -63,7 +63,7 @@ module "NSG_FE_Subnet" {
 
 module "FE_Subnet" {
   #Module location
-  source = "./Modules/06 - 3 Subnet with routetable"
+  source = "./Modules/06-3 Subnet with routetable"
 
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 0)}"
@@ -98,7 +98,7 @@ module "NSG_BE_Subnet" {
 
 module "BE_Subnet" {
   #Module location
-  source = "./Modules/06 - 1 Subnet"
+  source = "./Modules/06-1 Subnet"
 
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 1)}"

@@ -81,16 +81,16 @@ resource "azurerm_network_interface" "TerraNICnopipwithcountLoadBalanced" {
 }
 
 resource "azurerm_network_interface" "TerraNICnopipwithcountNotLoadBalanced" {
-  count                         = "${var.IsLoadBalanced ? 0 : var.NICcount}"
-  name                          = "${var.NICName}${count.index+1}"
-  location                      = "${var.NICLocation}"
-  resource_group_name           = "${var.RGName}"
-  application_security_group_id = "${var.ASGId}"
+  count               = "${var.IsLoadBalanced ? 0 : var.NICcount}"
+  name                = "${var.NICName}${count.index+1}"
+  location            = "${var.NICLocation}"
+  resource_group_name = "${var.RGName}"
 
   ip_configuration {
     name                          = "ConfigIP-NIC${var.NICName}${count.index+1}"
     subnet_id                     = "${var.SubnetId}"
     private_ip_address_allocation = "dynamic"
+    application_security_group_id = ["${var.ASGId}"]
   }
 
   tags {

@@ -26,7 +26,7 @@ variable "StorageAccountName" {
 
 variable "Quota" {
   type    = "string"
-  default = "0"
+  default = "5120"
 }
 
 #Varaibles defining Tags

@@ -10,7 +10,7 @@
 
 module "FW_Subnet" {
   #Module location
-  source = "./Modules/06 - 2 SubnetWithoutNSG"
+  source = "./Modules/06-2 SubnetWithoutNSG"
 
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 3)}"
@@ -70,7 +70,7 @@ data "template_file" "templateAZFW" {
 
 resource "azurerm_template_deployment" "Template-AZFW" {
   name                = "azurefwtemplate"
-  resource_group_name = "${module.ResourceGroupAZFW.Name}"
+  resource_group_name = "${module.ResourceGroupInfra.Name}"
 
   template_body = "${data.template_file.templateAZFW.rendered}"
 

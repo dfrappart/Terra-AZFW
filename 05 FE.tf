@@ -24,7 +24,7 @@ module "AllowHTTPFromInternetFEIn" {
 
 module "AllowHTTPSFromInternetFEIn" {
   #Module source
-  source = "./Modules/08 NSGRule with services tags"
+  source = "./Modules/08-2 NSGRule with services tags"
 
   #Module variable
   RGName                          = "${module.ResourceGroupInfra.Name}"
@@ -55,7 +55,7 @@ module "Allow8080FromInternettoIISServersIn" {
   NSGRuleSourcePortRange      = "*"
   NSGRuleDestinationPortRange = 8080
   NSGRuleSourceAddressPrefix  = "Internet"
-  NSGRuleDestinationASG       = ["${module.ASG_IISServers.id}"]
+  NSGRuleDestinationASG       = ["${module.ASG_IISServers.Id}"]
 }
 
 #FE public IP Creation
