@@ -13,7 +13,7 @@ module "FW_Subnet" {
   source = "./Modules/06 - 2 SubnetWithoutNSG"
 
   #Module variable
-  SubnetName          = "AzureFirewallSubnet"
+  SubnetName          = "${lookup(var.SubnetName, 3)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetName            = "${module.SampleArchi_vNet.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 3)}"
@@ -70,17 +70,15 @@ data "template_file" "templateAZFW" {
 
 resource "azurerm_template_deployment" "Template-AZFW" {
   name                = "azurefwtemplate"
-  resource_group_name = "${module.ResourceGroupInfra.Name}"
+  resource_group_name = "${module.ResourceGroupAZFW.Name}"
 
   template_body = "${data.template_file.templateAZFW.rendered}"
 
   parameters {
-    "location"           = "${var.AzureRegion}"
-    "virtualNetworkName" = "${module.SampleArchi_vNet.Name}"
-    "aZFWPublicIPName"   = "${element(module.FW_PIP.Names,0)}"
-    "aZFWSubnetId"       = "${module.FW_Subnet.Id}"
-    "aZFWPublicIpId"     = "${element(module.FW_PIP.Ids,0)}"
-    "fESubnetRange"      = "${module.FE_Subnet.AddressPrefix}"
+    "location"       = "${var.AzureRegion}"
+    "aZFWSubnetId"   = "${module.FW_Subnet.Id}"
+    "aZFWPublicIpId" = "${element(module.FW_PIP.Ids,0)}"
+    "fESubnetRange"  = "${lookup(var.SubnetAddressRange, 0)}"
   }
 
   deployment_mode = "Incremental"

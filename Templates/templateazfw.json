@@ -80,7 +80,7 @@
                       {
                         "name": "FERule1",
                         "protocols": ["TCP"],
-                        "sourceAddresses": ["parameters('fESubnetRange')"],
+                        "sourceAddresses": ["[parameters('fESubnetRange')]"],
                         "destinationAddresses": ["*"],
                         "destinationPorts": ["8000-8999"]
                       }
