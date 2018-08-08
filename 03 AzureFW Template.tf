@@ -44,7 +44,7 @@ module "Route" {
   RouteName          = "RoutetoAzFW"
   RGName             = "${module.ResourceGroupInfra.Name}"
   RTName             = "${module.RouteTable.Name}"
-  DestinationCIDR    = "${lookup(var.SubnetAddressRange, 3)}"
+  DestinationCIDR    = "0.0.0.0/0"
   NextHop            = "VirtualAppliance"
   NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[3],4)}"
 }

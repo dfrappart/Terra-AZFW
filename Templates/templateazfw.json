@@ -64,7 +64,7 @@
                       {
                         "name": "appRule1",
                         "protocols": [{"port": "80", "protocolType": "http"}, {"port": "443", "protocolType": "https"}],
-                        "targetUrls": ["*microsoft.com"]
+                        "targetUrls": ["*microsoft.com","*github.com"]
                       }
                     ]
                   }
@@ -83,6 +83,13 @@
                         "sourceAddresses": ["[parameters('fESubnetRange')]"],
                         "destinationAddresses": ["*"],
                         "destinationPorts": ["8000-8999"]
+                      },
+                      {
+                        "name": "InboundHTTP",
+                        "protocols": ["TCP"],
+                        "sourceAddresses": ["0.0.0.0/0"],
+                        "destinationAddresses": ["[parameters('fESubnetRange')]"],
+                        "destinationPorts": ["80","443","8080"]
                       }
                     ]
                   }
