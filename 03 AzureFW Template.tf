@@ -6,17 +6,17 @@
 # FW Subnet zone
 ######################################################################
 
-#FE_Subnet
+#FW_Subnet
 
 module "FW_Subnet" {
   #Module location
   source = "./Modules/06-2 SubnetWithoutNSG"
 
   #Module variable
-  SubnetName          = "${lookup(var.SubnetName, 3)}"
+  SubnetName          = "${lookup(var.SubnetName, 5)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetName            = "${module.SampleArchi_vNet.Name}"
-  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 3)}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 5)}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

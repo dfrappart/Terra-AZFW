@@ -18,7 +18,7 @@ module "NSG_Bastion_Subnet" {
   source = "./Modules/07 NSG"
 
   #Module variable
-  NSGName             = "NSG_${lookup(var.SubnetName, 2)}"
+  NSGName             = "NSG_${lookup(var.SubnetName, 4)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   NSGLocation         = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"
@@ -32,10 +32,10 @@ module "Bastion_Subnet" {
   source = "./Modules/06-1 Subnet"
 
   #Module variable
-  SubnetName          = "${lookup(var.SubnetName, 2)}"
+  SubnetName          = "${lookup(var.SubnetName, 4)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetName            = "${module.SampleArchi_vNet.Name}"
-  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 2)}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 4)}"
   NSGid               = "${module.NSG_Bastion_Subnet.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
@@ -52,16 +52,16 @@ module "NSG_FE_Subnet" {
   source = "./Modules/07 NSG"
 
   #Module variable
-  NSGName             = "NSG_${lookup(var.SubnetName, 0)}"
+  NSGName             = "NSG_FE_Subnet"
   RGName              = "${module.ResourceGroupInfra.Name}"
   NSGLocation         = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-#FE_Subnet
+#FE_Subnet1
 
-module "FE_Subnet" {
+module "FE_Subnet1" {
   #Module location
   source = "./Modules/06-3 Subnet with routetable"
 
@@ -72,6 +72,22 @@ module "FE_Subnet" {
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 0)}"
   NSGid               = "${module.NSG_FE_Subnet.Id}"
   RouteTableId        = "${module.RouteTable.Id}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
+#FE_Subnet2
+
+module "FE_Subnet2" {
+  #Module location
+  source = "./Modules/06-1 Subnet"
+
+  #Module variable
+  SubnetName          = "${lookup(var.SubnetName, 1)}"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  vNetName            = "${module.SampleArchi_vNet.Name}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 1)}"
+  NSGid               = "${module.NSG_FE_Subnet.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
@@ -87,25 +103,61 @@ module "NSG_BE_Subnet" {
   source = "./Modules/07 NSG"
 
   #Module variable
-  NSGName             = "NSG_${lookup(var.SubnetName, 1)}"
+  NSGName             = "NSG_BE_Subnet"
   RGName              = "${module.ResourceGroupInfra.Name}"
   NSGLocation         = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-#FE_Subnet
+#BE_Subnet1
 
-module "BE_Subnet" {
+module "BE_Subnet1" {
+  #Module location
+  source = "./Modules/06-3 Subnet with routetable"
+
+  #Module variable
+  SubnetName          = "${lookup(var.SubnetName, 2)}"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  vNetName            = "${module.SampleArchi_vNet.Name}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 2)}"
+  NSGid               = "${module.NSG_BE_Subnet.Id}"
+  RouteTableId        = "${module.RouteTable.Id}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
+#BE_Subnet2
+
+module "BE_Subnet2" {
   #Module location
   source = "./Modules/06-1 Subnet"
 
   #Module variable
-  SubnetName          = "${lookup(var.SubnetName, 1)}"
+  SubnetName          = "${lookup(var.SubnetName, 3)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetName            = "${module.SampleArchi_vNet.Name}"
-  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 1)}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 3)}"
   NSGid               = "${module.NSG_BE_Subnet.Id}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
+######################################################################
+# GW Subnet zone
+######################################################################
+
+#FW_Subnet
+
+module "GW_Subnet" {
+  #Module location
+  source = "./Modules/06-2 SubnetWithoutNSG"
+
+  #Module variable
+  SubnetName          = "${lookup(var.SubnetName, 6)}"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  vNetName            = "${module.SampleArchi_vNet.Name}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 6)}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
