@@ -1,6 +1,6 @@
 ##############################################################
 #This module allows the creation of a Network Security 
-#Group Rule with source service tags and dest ASG
+#Group Rule with source and destination ASG
 ##############################################################
 
 #Variable declaration for Module
@@ -55,8 +55,8 @@ variable "NSGRuleDestinationPortRange" {
 }
 
 #The NSG rule address preifx defines the source address(es) from whichthe trafic origin is allowed/blocked
-variable "NSGRuleSourceAddressPrefix" {
-  type = "string"
+variable "NSGRuleSourceASG" {
+  type = "list"
 }
 
 #The NSG rule address preifx defines the source address(es) from whichthe trafic origin is allowed/blocked

@@ -166,13 +166,13 @@ module "GW_Subnet" {
 # Application Security Groups
 ######################################################################
 
-#ASG for PotGresql Servers
-module "ASG_PostGresqlServer" {
+#ASG for MSSQL Servers
+module "ASG_MSsqlServer" {
   #Module location
   source = "./Modules/07-2 Application Security Group"
 
   #Module variables
-  ASGName             = "PostGresqlServer"
+  ASGName             = "MSsqlServer"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ASGLocation         = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"

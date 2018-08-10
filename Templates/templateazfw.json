@@ -24,7 +24,13 @@
         "fESubnetRange": {
           "type": "string",
           "metadata": {
-            "description": "Subnet FrontEnd protected by the AZ FW"
+            "description": "Subnet Front-End protected by the AZ FW"
+          }
+        },
+        "bESubnetRange": {
+          "type": "string",
+          "metadata": {
+            "description": "Subnet Back-End protected by the AZ FW"
           }
         },
         "aZFWPublicIpId": {
@@ -72,7 +78,7 @@
               ],
               "networkRuleCollections": [
                 {
-                  "name": "FERulesCollection",
+                  "name": "networkRulesCollection1",
                   "properties": {                    
                     "priority": 200,
                     "action":  { "type":  "Allow"},
@@ -82,7 +88,14 @@
                         "protocols": ["TCP"],
                         "sourceAddresses": ["[parameters('fESubnetRange')]"],
                         "destinationAddresses": ["*"],
-                        "destinationPorts": ["8000-8999"]
+                        "destinationPorts": ["80","443","53"]
+                      },
+                      {
+                        "name": "BERule1",
+                        "protocols": ["TCP"],
+                        "sourceAddresses": ["[parameters('bESubnetRange')]"],
+                        "destinationAddresses": ["*"],
+                        "destinationPorts": ["80","443","53"]
                       },
                       {
                         "name": "InboundHTTP",

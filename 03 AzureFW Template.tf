@@ -79,6 +79,7 @@ resource "azurerm_template_deployment" "Template-AZFW" {
     "aZFWSubnetId"   = "${module.FW_Subnet.Id}"
     "aZFWPublicIpId" = "${element(module.FW_PIP.Ids,0)}"
     "fESubnetRange"  = "${lookup(var.SubnetAddressRange, 0)}"
+    "bESubnetRange"  = "${lookup(var.SubnetAddressRange, 2)}"
   }
 
   deployment_mode = "Incremental"
