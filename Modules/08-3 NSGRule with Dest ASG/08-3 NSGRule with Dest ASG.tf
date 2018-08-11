@@ -66,7 +66,7 @@ variable "NSGRuleDestinationASG" {
 
 # creation of the rule
 
-resource "azurerm_network_security_rule" "Terra-NSGRulewSTags" {
+resource "azurerm_network_security_rule" "Terra-NSGRulewDestASG" {
   name                                       = "${var.NSGRuleName}"
   priority                                   = "${var.NSGRulePriority}"
   direction                                  = "${var.NSGRuleDirection}"
@@ -83,9 +83,9 @@ resource "azurerm_network_security_rule" "Terra-NSGRulewSTags" {
 # Module output
 
 output "Name" {
-  value = "${azurerm_network_security_rule.Terra-NSGRulewSTags.name}"
+  value = "${azurerm_network_security_rule.Terra-NSGRulewDestASG.name}"
 }
 
 output "Id" {
-  value = "${azurerm_network_security_rule.Terra-NSGRulewSTags.id}"
+  value = "${azurerm_network_security_rule.Terra-NSGRulewDestASG.id}"
 }
