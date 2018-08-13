@@ -16,8 +16,7 @@ module "AllowHTTPFromInternetFEIn" {
   NSGRuleDirection                  = "Inbound"
   NSGRuleAccess                     = "Allow"
   NSGRuleProtocol                   = "Tcp"
-  NSGRuleSourcePortRange            = "*"
-  NSGRuleDestinationPortRange       = 80
+  NSGRuleDestinationPortRanges       = 80
   NSGRuleSourceAddressPrefixes      = ["0.0.0.0/0"]
   NSGRuleDestinationAddressPrefixes = ["${lookup(var.SubnetAddressRange, 0)}", "${lookup(var.SubnetAddressRange, 1)}"]
 }
@@ -34,8 +33,7 @@ module "AllowHTTPSFromInternetFEIn" {
   NSGRuleDirection                  = "Inbound"
   NSGRuleAccess                     = "Allow"
   NSGRuleProtocol                   = "Tcp"
-  NSGRuleSourcePortRange            = "*"
-  NSGRuleDestinationPortRange       = 443
+  NSGRuleDestinationPortRanges       = 443
   NSGRuleSourceAddressPrefixes      = ["0.0.0.0/0"]
   NSGRuleDestinationAddressPrefixes = ["${lookup(var.SubnetAddressRange, 0)}", "${lookup(var.SubnetAddressRange, 1)}"]
 }
@@ -52,7 +50,6 @@ module "Allow8080FromInternettoIISServersIn" {
   NSGRuleDirection            = "Inbound"
   NSGRuleAccess               = "Allow"
   NSGRuleProtocol             = "Tcp"
-  NSGRuleSourcePortRange      = "*"
   NSGRuleDestinationPortRange = 8080
   NSGRuleSourceAddressPrefix  = "Internet"
   NSGRuleDestinationASG       = ["${module.ASG_IISServers.Id}"]

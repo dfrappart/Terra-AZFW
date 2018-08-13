@@ -6,7 +6,7 @@
 
 module "AllowMSSQLFromASGIIStoASGMSsqlServersIn" {
   #Module source
-  source = "./Modules/08-4 NSGRule with Dest ASG"
+  source = "./Modules/08-4 NSGRule with source and dest ASG"
 
   #Module variable
   RGName                      = "${module.ResourceGroupInfra.Name}"
@@ -50,7 +50,7 @@ module "NICs_BE1" {
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   SubnetId            = "${module.BE_Subnet1.Id}"
-  ASGIds              = ["${module.ASG_MSsqlServer.Id}"]
+  ASGIds              = ["${module.ASG_MSsqlServers.Id}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

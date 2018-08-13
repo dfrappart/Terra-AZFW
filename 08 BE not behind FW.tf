@@ -15,7 +15,7 @@ module "NICs_BE2" {
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   SubnetId            = "${module.BE_Subnet1.Id}"
-  ASGIds              = ["${module.ASG_MSsqlServer.Id}"]
+  ASGIds              = ["${module.ASG_MSsqlServers.Id}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

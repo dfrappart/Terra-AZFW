@@ -105,31 +105,54 @@ output "FilesExchangeStorageAccountSecondaryAccessKey" {
 ######################################################
 #FE_Subnet
 
-output "FE_SubnetName" {
-  value = "${module.FE_Subnet.Name}"
+output "FE_Subnet1Name" {
+  value = "${module.FE_Subnet1.Name}"
 }
 
-output "FE_SubnetId" {
-  value = "${module.FE_Subnet.Id}"
+output "FE_Subnet1Id" {
+  value = "${module.FE_Subnet1.Id}"
 }
 
-output "FE_SubnetAddressPrefix" {
-  value = "${module.FE_Subnet.AddressPrefix}"
+output "FE_Subnet1AddressPrefix" {
+  value = "${module.FE_Subnet1.AddressPrefix}"
 }
 
+output "FE_Subnet2Name" {
+  value = "${module.FE_Subnet2.Name}"
+}
+
+output "FE_Subnet2Id" {
+  value = "${module.FE_Subnet2.Id}"
+}
+
+output "FE_Subnet2AddressPrefix" {
+  value = "${module.FE_Subnet2.AddressPrefix}"
+}
 ######################################################
 #BE_Subnet
 
-output "BE_SubnetName" {
-  value = "${module.BE_Subnet.Name}"
+output "BE_Subnet1Name" {
+  value = "${module.BE_Subnet1.Name}"
 }
 
-output "BE_SubnetId" {
-  value = "${module.BE_Subnet.Id}"
+output "BE_Subnet1Id" {
+  value = "${module.BE_Subnet1.Id}"
 }
 
-output "BE_SubnetAddressPrefix" {
-  value = "${module.BE_Subnet.AddressPrefix}"
+output "BE_Subnet1AddressPrefix" {
+  value = "${module.BE_Subnet1.AddressPrefix}"
+}
+
+output "BE_Subnet2Name" {
+  value = "${module.BE_Subnet2.Name}"
+}
+
+output "BE_Subnet2Id" {
+  value = "${module.BE_Subnet2.Id}"
+}
+
+output "BE_Subnet2AddressPrefix" {
+  value = "${module.BE_Subnet2.AddressPrefix}"
 }
 
 ######################################################
@@ -145,6 +168,38 @@ output "Bastion_SubnetId" {
 
 output "Bastion_SubnetAddressPrefix" {
   value = "${module.Bastion_Subnet.AddressPrefix}"
+}
+
+
+######################################################
+#AZFW_Subnet
+
+output "FW_SubnetName" {
+  value = "${module.FW_Subnet.Name}"
+}
+
+output "FW_SubnetId" {
+  value = "${module.FW_Subnet.Id}"
+}
+
+output "FW_SubnetAddressPrefix" {
+  value = "${module.FW_Subnet.AddressPrefix}"
+}
+
+
+######################################################
+#AZGW_Subnet
+
+output "GW_SubnetName" {
+  value = "${module.GW_Subnet.Name}"
+}
+
+output "GW_SubnetId" {
+  value = "${module.GW_Subnet.Id}"
+}
+
+output "GW_SubnetAddressPrefix" {
+  value = "${module.GW_Subnet.AddressPrefix}"
 }
 
 ######################################################

@@ -167,7 +167,7 @@ module "GW_Subnet" {
 ######################################################################
 
 #ASG for MSSQL Servers
-module "ASG_MSsqlServer" {
+module "ASG_MSsqlServers" {
   #Module location
   source = "./Modules/07-2 Application Security Group"
 
