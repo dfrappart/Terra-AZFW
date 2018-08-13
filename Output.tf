@@ -204,7 +204,7 @@ output "GW_SubnetAddressPrefix" {
 
 ######################################################
 #Bastion VMs Output
-/*
+
 output "Bastionfqdn" {
   value = ["${module.BastionPublicIP.fqdns}"]
 }
@@ -216,5 +216,5 @@ output "BastionPrivateIP" {
 output "BastionNICId" {
   value = ["${module.NICs_Bastion.Ids}"]
 }
-*/
+
 

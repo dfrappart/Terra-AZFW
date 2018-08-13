@@ -172,7 +172,7 @@ module "ASG_MSsqlServers" {
   source = "./Modules/07-2 Application Security Group"
 
   #Module variables
-  ASGName             = "MSsqlServer"
+  ASGName             = "MSsqlServers"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ASGLocation         = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"

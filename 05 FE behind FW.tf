@@ -4,39 +4,23 @@
 
 #NSG Rules
 
-module "AllowHTTPFromInternetFEIn" {
+module "AllowHTTP-HTTPSFromInternetFEIn" {
   #Module source
   source = "./Modules/08-1 NSGRule"
 
   #Module variable
   RGName                            = "${module.ResourceGroupInfra.Name}"
   NSGReference                      = "${module.NSG_FE_Subnet.Name}"
-  NSGRuleName                       = "AllowHTTPFromInternetFEIn"
+  NSGRuleName                       = "AllowHTTP-HTTPSFromInternetFEIn"
   NSGRulePriority                   = 101
   NSGRuleDirection                  = "Inbound"
   NSGRuleAccess                     = "Allow"
   NSGRuleProtocol                   = "Tcp"
-  NSGRuleDestinationPortRanges       = 80
+  NSGRuleDestinationPortRanges       = [80,443]
   NSGRuleSourceAddressPrefixes      = ["0.0.0.0/0"]
   NSGRuleDestinationAddressPrefixes = ["${lookup(var.SubnetAddressRange, 0)}", "${lookup(var.SubnetAddressRange, 1)}"]
 }
 
-module "AllowHTTPSFromInternetFEIn" {
-  #Module source
-  source = "./Modules/08-1 NSGRule"
-
-  #Module variable
-  RGName                            = "${module.ResourceGroupInfra.Name}"
-  NSGReference                      = "${module.NSG_FE_Subnet.Name}"
-  NSGRuleName                       = "AllowHTTPSFromInternetFEIn"
-  NSGRulePriority                   = 102
-  NSGRuleDirection                  = "Inbound"
-  NSGRuleAccess                     = "Allow"
-  NSGRuleProtocol                   = "Tcp"
-  NSGRuleDestinationPortRanges       = 443
-  NSGRuleSourceAddressPrefixes      = ["0.0.0.0/0"]
-  NSGRuleDestinationAddressPrefixes = ["${lookup(var.SubnetAddressRange, 0)}", "${lookup(var.SubnetAddressRange, 1)}"]
-}
 
 module "Allow8080FromInternettoIISServersIn" {
   #Module source

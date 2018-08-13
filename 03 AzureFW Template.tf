@@ -46,7 +46,7 @@ module "Route" {
   RTName             = "${module.RouteTable.Name}"
   DestinationCIDR    = "0.0.0.0/0"
   NextHop            = "VirtualAppliance"
-  NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[3],4)}"
+  NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[5],4)}"
 }
 
 #FW PIP

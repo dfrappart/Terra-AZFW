@@ -97,10 +97,11 @@ output "InternalFQDNs" {
   value = ["${azurerm_network_interface.TerraNICwpip.*.internal_fqdn}"]
 }
 
+/*
 output "VMIDs" {
   value = ["${azurerm_network_interface.TerraNICwpip.*.virtual_machine_id}"]
 }
-
+*/
 output "MacAddresses" {
   value = ["${azurerm_network_interface.TerraNICwpip.*.mac_address}"]
 }
