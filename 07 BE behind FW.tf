@@ -46,6 +46,7 @@ module "NICs_BE1" {
 
   #Module variables
 
+  NICcount            = "2"
   NICName             = "NIC_BE1"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
@@ -64,7 +65,7 @@ module "DataDisks_BE1" {
 
   #Module variables
 
-  Manageddiskcount    = "1"
+  Manageddiskcount    = "2"
   ManageddiskName     = "DataDisk_BE1"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ManagedDiskLocation = "${var.AzureRegion}"
@@ -84,6 +85,7 @@ module "VMs_BE1" {
 
   #Module variables
 
+  VMCount             = "2"
   VMName              = "BE1"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
@@ -111,6 +113,7 @@ module "CustomExtensionWinForBE1" {
 
   #Module variables
 
+  AgentCount           = "2"
   AgentName            = "CustomExtensionWinForBE1"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
@@ -128,7 +131,7 @@ module "NetworkWatcherAgentForBE1" {
   source = "./Modules/21 NetworkwatcheragentWin"
 
   #Module variables
-  AgentCount          = "1"
+  AgentCount          = "2"
   AgentName           = "NetworkWatcherAgentForBE1"
   AgentLocation       = "${var.AzureRegion}"
   AgentRG             = "${module.ResourceGroupInfra.Name}"
