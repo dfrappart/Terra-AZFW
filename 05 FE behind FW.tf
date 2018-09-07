@@ -147,6 +147,7 @@ module "CustomExtensionWinForFE1" {
   #Module variables
 
   AgentCount           = "2"
+  AgentCount          = "2"  
   AgentName            = "CustomExtensionWinForFE1"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
