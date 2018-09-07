@@ -46,6 +46,7 @@ module "FE1PublicIP" {
   source = "./Modules/10 PublicIP"
 
   #Module variables
+  PublicIPCount       = "2"
   PublicIPName        = "fe1pip"
   PublicIPLocation    = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
@@ -77,6 +78,7 @@ module "NICs_FE1" {
 
   #Module variables
 
+  NICCount            = "2"
   NICName             = "NIC_FE1"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
@@ -96,7 +98,7 @@ module "DataDisks_FE1" {
 
   #Module variables
 
-  Manageddiskcount    = "1"
+  Manageddiskcount    = "2"
   ManageddiskName     = "DataDisk_FE1"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ManagedDiskLocation = "${var.AzureRegion}"
@@ -116,6 +118,7 @@ module "VMs_FE1" {
 
   #Module variables
 
+  VMCount             = "2"
   VMName              = "FE1"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
@@ -143,6 +146,7 @@ module "CustomExtensionWinForFE1" {
 
   #Module variables
 
+  AgentCount           = "2"
   AgentName            = "CustomExtensionWinForFE1"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
@@ -160,7 +164,7 @@ module "NetworkWatcherAgentForFE1" {
   source = "./Modules/21 NetworkwatcheragentWin"
 
   #Module variables
-  AgentCount          = "1"
+  AgentCount          = "2"
   AgentName           = "NetworkWatcherAgentForFE1"
   AgentLocation       = "${var.AzureRegion}"
   AgentRG             = "${module.ResourceGroupInfra.Name}"
