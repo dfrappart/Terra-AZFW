@@ -6,7 +6,6 @@ AzureDVTProviderSecret.tf
 AzureDVTProviderSecret.tfold
 AzurePreviewProvider.tf
 AzurePreviewProvider.tfold
-variables.tf
 terraform.tfstate
 terraform.tfstate.backup
 *.tfstate*
