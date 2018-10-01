@@ -1,77 +1,78 @@
 ##############################################################
-#This file creates FE Windows servers behind the AZ FW
+#This file creates FE Windows servers
 ##############################################################
 
 #NSG Rules
 
-module "AllowHTTP-HTTPSFromInternetFEIn" {
+module "AllowHTTP-HTTPSFromInternetFEVNet2In" {
   #Module source
   source = "./Modules/08-1 NSGRule"
 
   #Module variable
   RGName                            = "${module.ResourceGroupInfra.Name}"
-  NSGReference                      = "${module.NSG_FE_Subnet.Name}"
-  NSGRuleName                       = "AllowHTTP-HTTPSFromInternetFEIn"
+  NSGReference                      = "${module.NSG_FE_Subnet_VNet2.Name}"
+  NSGRuleName                       = "AllowHTTP-HTTPSFromInternetFEVNet2In"
   NSGRulePriority                   = 101
   NSGRuleDirection                  = "Inbound"
   NSGRuleAccess                     = "Allow"
   NSGRuleProtocol                   = "Tcp"
   NSGRuleDestinationPortRanges       = [80,443]
   NSGRuleSourceAddressPrefixes      = ["0.0.0.0/0"]
-  NSGRuleDestinationAddressPrefixes = ["${lookup(var.SubnetAddressRange, 0)}", "${lookup(var.SubnetAddressRange, 1)}"]
+  NSGRuleDestinationAddressPrefixes = ["${lookup(var.SubnetAddressRange, 5)}"]
 }
 
 
-module "Allow8080FromInternettoIISServersIn" {
+module "Allow8080FromInternettoIISServersVNet1In" {
   #Module source
   source = "./Modules/08-3 NSGRule with Dest ASG"
 
   #Module variable
   RGName                      = "${module.ResourceGroupInfra.Name}"
-  NSGReference                = "${module.NSG_FE_Subnet.Name}"
-  NSGRuleName                 = "Allow8080FromInternettoIISServersIn"
+  NSGReference                = "${module.NSG_FE_Subnet_VNet2.Name}"
+  NSGRuleName                 = "Allow8080FromInternettoIISServersVNet1In"
   NSGRulePriority             = 103
   NSGRuleDirection            = "Inbound"
   NSGRuleAccess               = "Allow"
   NSGRuleProtocol             = "Tcp"
   NSGRuleDestinationPortRange = 8080
   NSGRuleSourceAddressPrefix  = "Internet"
-  NSGRuleDestinationASG       = ["${module.ASG_IISServers.Id}"]
+  NSGRuleDestinationASG       = ["${module.ASG_IISServers_VNet2.Id}"]
 }
 
-#FE public IP Creation
-
-module "FE1PublicIP" {
-  #Module source
-  source = "./Modules/10 PublicIP"
-
-  #Module variables
-  PublicIPCount       = "2"
-  PublicIPName        = "fe1pip"
-  PublicIPLocation    = "${var.AzureRegion}"
-  RGName              = "${module.ResourceGroupInfra.Name}"
-  EnvironmentTag      = "${var.EnvironmentTag}"
-  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
-}
 
 #Availability set creation
 
-module "AS_FE" {
+module "AS_FE_VNet2" {
   #Module source
 
   source = "./Modules/13 AvailabilitySet"
 
   #Module variables
-  ASName              = "AS_FE"
+  ASName              = "AS_FE_VNet2"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ASLocation          = "${var.AzureRegion}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
+#FE public IP Creation
+
+module "FEVNet2PublicIP" {
+  #Module source
+  source = "./Modules/10 PublicIP"
+
+  #Module variables
+  PublicIPCount       = "2"
+  PublicIPName        = "fevnet2pip"
+  PublicIPLocation    = "${var.AzureRegion}"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
 #NIC Creation
 
-module "NICs_FE1" {
+module "NICs_FE_VNet2" {
   #module source
 
   source = "./Modules/12-6 NICwithPIPwithCountwithASG"
@@ -79,19 +80,19 @@ module "NICs_FE1" {
   #Module variables
 
   NICCount            = "2"
-  NICName             = "NIC_FE1"
+  NICName             = "NIC_FE_VNet2"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  SubnetId            = "${module.FE_Subnet1.Id}"
-  PublicIPId          = ["${module.FE1PublicIP.Ids}"]
-  ASGIds              = ["${module.ASG_IISServers.Id}"]
+  SubnetId            = "${module.FE_Subnet_VNet2.Id}"
+  PublicIPId          = ["${module.FEVNet2PublicIP.Ids}"]
+  ASGIds              = ["${module.ASG_IISServers_VNet2.Id}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
 #Datadisk creation
 
-module "DataDisks_FE1" {
+module "DataDisks_FE_VNet2" {
   #Module source
 
   source = "./Modules/11 ManagedDiskswithcount"
@@ -99,7 +100,7 @@ module "DataDisks_FE1" {
   #Module variables
 
   Manageddiskcount    = "2"
-  ManageddiskName     = "DataDisk_FE1"
+  ManageddiskName     = "DataDisk_FE_VNet2"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ManagedDiskLocation = "${var.AzureRegion}"
   StorageAccountType  = "${lookup(var.Manageddiskstoragetier, 0)}"
@@ -111,7 +112,7 @@ module "DataDisks_FE1" {
 
 #VM creation
 
-module "VMs_FE1" {
+module "VMs_FE_VNet2" {
   #module source
 
   source = "./Modules/15 WinVMWithCount"
@@ -119,18 +120,18 @@ module "VMs_FE1" {
   #Module variables
 
   VMCount             = "2"
-  VMName              = "FE1"
+  VMName              = "FE2"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
-  VMNICid             = ["${module.NICs_FE1.Ids}"]
+  VMNICid             = ["${module.NICs_FE_VNet2.Ids}"]
   VMSize              = "${lookup(var.VMSize, 1)}"
-  ASID                = "${module.AS_FE.Id}"
+  ASID                = "${module.AS_FE_VNet2.Id}"
   VMStorageTier       = "${lookup(var.Manageddiskstoragetier, 0)}"
   VMAdminName         = "${var.VMAdminName}"
   VMAdminPassword     = "${var.VMAdminPassword}"
-  DataDiskId          = ["${module.DataDisks_FE1.Ids}"]
-  DataDiskName        = ["${module.DataDisks_FE1.Names}"]
-  DataDiskSize        = ["${module.DataDisks_FE1.Sizes}"]
+  DataDiskId          = ["${module.DataDisks_FE_VNet2.Ids}"]
+  DataDiskName        = ["${module.DataDisks_FE_VNet2.Names}"]
+  DataDiskSize        = ["${module.DataDisks_FE_VNet2.Sizes}"]
   VMPublisherName     = "${lookup(var.PublisherName, 0)}"
   VMOffer             = "${lookup(var.Offer, 0)}"
   VMsku               = "${lookup(var.sku, 0)}"
@@ -140,18 +141,17 @@ module "VMs_FE1" {
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "CustomExtensionWinForFE1" {
+module "CustomExtensionWinForFE_VNet2" {
   #Module location
   source = "./Modules/22 CustomExtensionScriptwithtpl"
 
   #Module variables
 
   AgentCount           = "2"
-  AgentCount          = "2"  
-  AgentName            = "CustomExtensionWinForFE1"
+  AgentName            = "CustomExtensionWinForFE_VNet2"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
-  VMName               = ["${module.VMs_FE1.Name}"]
+  VMName               = ["${module.VMs_FE_VNet2.Name}"]
   EnvironmentTag       = "${var.EnvironmentTag}"
   EnvironmentUsageTag  = "${var.EnvironmentUsageTag}"
   AgentPublisher       = "microsoft.compute"
@@ -160,16 +160,16 @@ module "CustomExtensionWinForFE1" {
   SettingsTemplatePath = "./Templates/CloudInitWin.tpl"
 }
 
-module "NetworkWatcherAgentForFE1" {
+module "NetworkWatcherAgentForFEVNet2" {
   #Module Location
   source = "./Modules/21 NetworkwatcheragentWin"
 
   #Module variables
   AgentCount          = "2"
-  AgentName           = "NetworkWatcherAgentForFE1"
+  AgentName           = "NetworkWatcherAgentForFEVNet2"
   AgentLocation       = "${var.AzureRegion}"
   AgentRG             = "${module.ResourceGroupInfra.Name}"
-  VMName              = ["${module.VMs_FE1.Name}"]
+  VMName              = ["${module.VMs_FE_VNet2.Name}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

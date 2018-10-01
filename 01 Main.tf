@@ -33,17 +33,32 @@ module "ResourceGroupInfra" {
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-# Creating vNET
+# Creating VNet1
 
-module "SampleArchi_vNet" {
+module "VNet1" {
   #Module location
   source = "./Modules/02 VNet"
 
   #Module variable
-  vNetName            = "${var.vNetName}${var.EnvironmentUsageTag}${var.EnvironmentTag}"
+  vNetName            = "${var.vNetName}${var.EnvironmentUsageTag}${var.EnvironmentTag}-01"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetLocation        = "${var.AzureRegion}"
-  vNetAddressSpace    = "${var.vNetIPRange}"
+  vNetAddressSpace    = "${var.vNet1IPRange}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
+# Creating VNet2
+
+module "VNet2" {
+  #Module location
+  source = "./Modules/02 VNet"
+
+  #Module variable
+  vNetName            = "${var.vNetName}${var.EnvironmentUsageTag}${var.EnvironmentTag}-02"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  vNetLocation        = "${var.AzureRegion}"
+  vNetAddressSpace    = "${var.vNet2IPRange}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

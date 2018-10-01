@@ -8,27 +8,27 @@
 
 #FW_Subnet
 
-module "FW_Subnet" {
+module "FW_Subnet_VNet1" {
   #Module location
   source = "./Modules/06-2 SubnetWithoutNSG"
 
   #Module variable
-  SubnetName          = "${lookup(var.SubnetName, 5)}"
+  SubnetName          = "${lookup(var.SubnetName, 3)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetName            = "${module.SampleArchi_vNet.Name}"
-  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 5)}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 3)}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
 #UDR for AZ FW
 
-module "RouteTable" {
+module "RouteTable_VNet1" {
   #Module location
   source = "./Modules/17 RouteTable"
 
   #Module variable
-  RouteTableName      = "RouteTabletoAzFW"
+  RouteTableName      = "RouteTabletoAzFW_VNet1"
   RGName              = "${module.ResourceGroupInfra.Name}"
   RTLocation          = "${var.AzureRegion}"
   BGPDisabled         = "false"
@@ -36,27 +36,27 @@ module "RouteTable" {
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "Route" {
+module "Route_Vnet1" {
   #Module location
   source = "./Modules/16 Route"
 
   #Module variable
-  RouteName          = "RoutetoAzFW"
+  RouteName          = "RoutetoAzFW_Vnet1"
   RGName             = "${module.ResourceGroupInfra.Name}"
   RTName             = "${module.RouteTable.Name}"
   DestinationCIDR    = "0.0.0.0/0"
   NextHop            = "VirtualAppliance"
-  NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[5],4)}"
+  NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[3],4)}"
 }
 
 #FW PIP
 
-module "FW_PIP" {
+module "FW_VNet1_PIP" {
   #Module location
   source = "./Modules/10 PublicIP"
 
   #Module variables
-  PublicIPName        = "AzureFWIP"
+  PublicIPName        = "azurefwvnet1pip"
   PublicIPLocation    = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   PIPAddressSku       = "standard"
@@ -76,10 +76,9 @@ resource "azurerm_template_deployment" "Template-AZFW" {
 
   parameters {
     "location"       = "${var.AzureRegion}"
-    "aZFWSubnetId"   = "${module.FW_Subnet.Id}"
-    "aZFWPublicIpId" = "${element(module.FW_PIP.Ids,0)}"
-    "fESubnetRange"  = "${lookup(var.SubnetAddressRange, 0)}"
-    "bESubnetRange"  = "${lookup(var.SubnetAddressRange, 2)}"
+    "aZFWSubnetId"   = "${module.FW_Subnet_VNet1.Id}"
+    "aZFWPublicIpId" = "${element(module.FW_VNet1_PIP.Ids,0)}"
+    "bESubnetRange"  = "${lookup(var.SubnetAddressRange, 1)}"
   }
 
   deployment_mode = "Incremental"

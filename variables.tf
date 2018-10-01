@@ -37,34 +37,40 @@ variable "vNetName" {
 
 #Variable defining the vnet ip range
 
-variable "vNetIPRange" {
+variable "vNet1IPRange" {
   type    = "list"
   default = ["10.0.0.0/20"]
+}
+
+variable "vNet2IPRange" {
+  type    = "list"
+  default = ["10.0.16.0/20"]
 }
 
 variable "SubnetAddressRange" {
   #Note: Subnet must be in range included in the vNET Range
 
   default = {
-    "0" = "10.0.0.0/25"
-    "1" = "10.0.0.128/25"
-    "2" = "10.0.1.0/25"
-    "3" = "10.0.1.128/25"
-    "4" = "10.0.2.0/24"
-    "5" = "10.0.3.0/25"
-    "6" = "10.0.3.128/25"
+    "0" = "10.0.0.0/24"
+    "1" = "10.0.1.0/24"
+    "2" = "10.0.2.0/24"
+    "3" = "10.0.3.0/25"
+    "4" = "10.0.3.128/25"
+    "5" = "10.0.16.0/24"
+    "6" = "10.0.17.0/24"
+    "7" = "10.0.18.0/24"
+    "8" = "10.0.19.0/25"
+    "9" = "10.0.19.128/25"    
   }
 }
 
 variable "SubnetName" {
   default = {
-    "0" = "FE_Subnet1"
-    "1" = "FE_Subnet2"
-    "2" = "BE_Subnet1"
-    "3" = "BE_Subnet2"
-    "4" = "Bastion_Subnet"
-    "5" = "AzureFirewallSubnet"
-    "6" = "GatewaySubnet"
+    "0" = "FE_Subnet"
+    "1" = "BE_Subnet"
+    "2" = "Bastion_Subnet"
+    "3" = "AzureFirewallSubnet"
+    "4" = "GatewaySubnet"
   }
 }
 

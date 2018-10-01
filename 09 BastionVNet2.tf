@@ -1,53 +1,85 @@
 ##############################################################
-#This file creates FE Windows servers
+#This file creates Bastion Windows servers
 ##############################################################
 
-#FE public IP Creation
+#NSG Rules
 
-module "FE2PublicIP" {
+module "AllowRDPromInternetBastionVNet2In" {
+  #Module source
+  source = "./Modules/08-2 NSGRule with services tags"
+
+  #Module variable
+  RGName                          = "${module.ResourceGroupInfra.Name}"
+  NSGReference                    = "${module.NSG_Bastion_Subnet_VNet2.Name}"
+  NSGRuleName                     = "AllowRDPromInternetBastionVNet2In"
+  NSGRulePriority                 = 101
+  NSGRuleDirection                = "Inbound"
+  NSGRuleAccess                   = "Allow"
+  NSGRuleProtocol                 = "Tcp"
+  NSGRuleSourcePortRange          = "*"
+  NSGRuleDestinationPortRange     = 3389
+  NSGRuleSourceAddressPrefix      = "Internet"
+  NSGRuleDestinationAddressPrefix = "${lookup(var.SubnetAddressRange, 7)}"
+}
+
+#Bastion public IP Creation
+
+module "BastionVNet2PublicIP" {
   #Module source
   source = "./Modules/10 PublicIP"
 
   #Module variables
-  PublicIPCount       = "2"
-  PublicIPName        = "fe2pip"
+  PublicIPName        = "bastionvnet2pip"
   PublicIPLocation    = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
+#Availability set creation
+
+module "AS_Bastion_VNet2" {
+  #Module source
+
+  source = "./Modules/13 AvailabilitySet"
+
+  #Module variables
+  ASName              = "AS_Bastion_VNet2"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  ASLocation          = "${var.AzureRegion}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
+
 #NIC Creation
 
-module "NICs_FE2" {
+module "NICs_Bastion_VNet2" {
   #module source
 
-  source = "./Modules/12-6 NICwithPIPwithCountwithASG"
+  source = "./Modules/12-1 NICwithPIPWithCount"
 
   #Module variables
 
-  NICCount            = "2"
-  NICName             = "NIC_FE2"
+  NICName             = "NIC_Bastion_VNet2"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  SubnetId            = "${module.FE_Subnet2.Id}"
-  PublicIPId          = ["${module.FE2PublicIP.Ids}"]
-  ASGIds              = ["${module.ASG_IISServers.Id}"]
+  SubnetId            = "${module.Bastion_Subnet_VNet2.Id}"
+  PublicIPId          = ["${module.BastionVNet2PublicIP.Ids}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
 #Datadisk creation
 
-module "DataDisks_FE2" {
+module "DataDisks_Bastion_VNet2" {
   #Module source
 
   source = "./Modules/11 ManagedDiskswithcount"
 
   #Module variables
 
-  Manageddiskcount    = "2"
-  ManageddiskName     = "DataDisk_FE2"
+  Manageddiskcount    = "1"
+  ManageddiskName     = "DataDisk_Bastion_VNet2"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ManagedDiskLocation = "${var.AzureRegion}"
   StorageAccountType  = "${lookup(var.Manageddiskstoragetier, 0)}"
@@ -59,46 +91,44 @@ module "DataDisks_FE2" {
 
 #VM creation
 
-module "VMs_FE2" {
+module "VMs_Bastion_VNet2" {
   #module source
 
   source = "./Modules/15 WinVMWithCount"
 
   #Module variables
 
-  VMCount             = "2"
-  VMName              = "FE2"
+  VMName              = "Bastion_VNet2"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
-  VMNICid             = ["${module.NICs_FE2.Ids}"]
+  VMNICid             = ["${module.NICs_Bastion_VNet2.Ids}"]
   VMSize              = "${lookup(var.VMSize, 1)}"
-  ASID                = "${module.AS_FE.Id}"
+  ASID                = "${module.AS_Bastion_VNet2.Id}"
   VMStorageTier       = "${lookup(var.Manageddiskstoragetier, 0)}"
   VMAdminName         = "${var.VMAdminName}"
   VMAdminPassword     = "${var.VMAdminPassword}"
-  DataDiskId          = ["${module.DataDisks_FE2.Ids}"]
-  DataDiskName        = ["${module.DataDisks_FE2.Names}"]
-  DataDiskSize        = ["${module.DataDisks_FE2.Sizes}"]
+  DataDiskId          = ["${module.DataDisks_Bastion_VNet2.Ids}"]
+  DataDiskName        = ["${module.DataDisks_Bastion_VNet2.Names}"]
+  DataDiskSize        = ["${module.DataDisks_Bastion_VNet2.Sizes}"]
   VMPublisherName     = "${lookup(var.PublisherName, 0)}"
   VMOffer             = "${lookup(var.Offer, 0)}"
   VMsku               = "${lookup(var.sku, 0)}"
   DiagnosticDiskURI   = "${module.DiagStorageAccount.PrimaryBlobEP}"
-  CloudinitscriptPath = "./Scripts/IISinstall.ps1"
+  CloudinitscriptPath = "./Scripts/telnetclientinstall.ps1"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "CustomExtensionWinForFE2" {
+module "CustomExtensionWinForBastion_VNet2" {
   #Module location
   source = "./Modules/22 CustomExtensionScriptwithtpl"
 
   #Module variables
 
-  AgentCount           = "2"
-  AgentName            = "CustomExtensionWinForFE2"
+  AgentName            = "CustomExtensionWinForBastion_VNet2"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
-  VMName               = ["${module.VMs_FE2.Name}"]
+  VMName               = ["${module.VMs_Bastion.Name}"]
   EnvironmentTag       = "${var.EnvironmentTag}"
   EnvironmentUsageTag  = "${var.EnvironmentUsageTag}"
   AgentPublisher       = "microsoft.compute"
@@ -107,16 +137,16 @@ module "CustomExtensionWinForFE2" {
   SettingsTemplatePath = "./Templates/CloudInitWin.tpl"
 }
 
-module "NetworkWatcherAgentForFE2" {
+module "NetworkWatcherAgentForBastion_VNet2" {
   #Module Location
   source = "./Modules/21 NetworkwatcheragentWin"
 
   #Module variables
-  AgentCount          = "2"
-  AgentName           = "NetworkWatcherAgentForFE2"
+  AgentCount          = "1"
+  AgentName           = "NetworkWatcherAgentForBastion_VNet2"
   AgentLocation       = "${var.AzureRegion}"
   AgentRG             = "${module.ResourceGroupInfra.Name}"
-  VMName              = ["${module.VMs_FE2.Name}"]
+  VMName              = ["${module.VMs_Bastion.Name}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

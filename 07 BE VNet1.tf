@@ -51,7 +51,7 @@ module "NICs_BE_VNet1" {
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
   SubnetId            = "${module.BE_Subnet_VNet1.Id}"
-  ASGIds              = ["${module.ASG_MSsqlServers.Id}"]
+  ASGIds              = ["${module.ASG_MSsqlServers_VNet1.Id}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
@@ -89,9 +89,9 @@ module "VMs_BE_VNet1" {
   VMName              = "BE_VNet1"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
-  VMNICid             = ["${module.NICs_BE1.Ids}"]
+  VMNICid             = ["${module.NICs_BE_VNet1.Ids}"]
   VMSize              = "${lookup(var.VMSize, 2)}"
-  ASID                = "${module.AS_BE.Id}"
+  ASID                = "${module.AS_BE_VNet1.Id}"
   VMStorageTier       = "${lookup(var.Manageddiskstoragetier, 0)}"
   VMAdminName         = "${var.VMAdminName}"
   VMAdminPassword     = "${var.VMAdminPassword}"

@@ -1,35 +1,72 @@
 ##############################################################
-#This file creates BE Windows servers not behind the AZ FW
+#This file creates BE Windows servers behind the AZ FW
 ##############################################################
+
+#NSG Rules
+
+module "AllowMSSQLFromASGIIStoASGMSsqlServersVNet2In" {
+  #Module source
+  source = "./Modules/08-4 NSGRule with source and dest ASG"
+
+  #Module variable
+  RGName                      = "${module.ResourceGroupInfra.Name}"
+  NSGReference                = "${module.NSG_BE_Subnet_VNet2.Name}"
+  NSGRuleName                 = "AllowMSSQLFromASGIIStoASGMSsqlServersVNet2In"
+  NSGRulePriority             = 101
+  NSGRuleDirection            = "Inbound"
+  NSGRuleAccess               = "Allow"
+  NSGRuleProtocol             = "Tcp"
+  NSGRuleSourcePortRange      = "*"
+  NSGRuleDestinationPortRange = 1433
+  NSGRuleSourceASG            = ["${module.ASG_IISServers_VNet2.Id}"]
+  NSGRuleDestinationASG       = ["${module.ASG_MSsqlServers_VNet2.Id}"]
+}
+
+#Availability set creation
+
+module "AS_BE_VNet2" {
+  #Module source
+
+  source = "./Modules/13 AvailabilitySet"
+
+  #Module variables
+  ASName              = "AS_BE_VNet2"
+  RGName              = "${module.ResourceGroupInfra.Name}"
+  ASLocation          = "${var.AzureRegion}"
+  EnvironmentTag      = "${var.EnvironmentTag}"
+  EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
+}
 
 #NIC Creation
 
-module "NICs_BE2" {
+module "NICs_BE_VNet2" {
   #module source
 
   source = "./Modules/12-5 NICwithoutPIPwithCountwithASG"
 
   #Module variables
 
-  NICName             = "NIC_BE2"
+  NICcount            = "2"
+  NICName             = "NICs_BE_VNet2"
   NICLocation         = "${var.AzureRegion}"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  SubnetId            = "${module.BE_Subnet2.Id}"
-  ASGIds              = ["${module.ASG_MSsqlServers.Id}"]
+  SubnetId            = "${module.BE_Subnet_VNet2.Id}"
+  ASGIds              = ["${module.ASG_MSsqlServers_VNet2.Id}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
 #Datadisk creation
 
-module "DataDisks_BE2" {
+module "DataDisks_BE_VNet2" {
   #Module source
 
   source = "./Modules/11 ManagedDiskswithcount"
 
   #Module variables
 
-  ManageddiskName     = "DataDisk_BE2"
+  Manageddiskcount    = "2"
+  ManageddiskName     = "DataDisk_BE_VNet2"
   RGName              = "${module.ResourceGroupInfra.Name}"
   ManagedDiskLocation = "${var.AzureRegion}"
   StorageAccountType  = "${lookup(var.Manageddiskstoragetier, 0)}"
@@ -41,44 +78,46 @@ module "DataDisks_BE2" {
 
 #VM creation
 
-module "VMs_BE2" {
+module "VMs_BE_VNet2" {
   #module source
 
   source = "./Modules/15 WinVMWithCount"
 
   #Module variables
 
-  VMName              = "BE2"
+  VMCount             = "2"
+  VMName              = "BE_VNet2"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
-  VMNICid             = ["${module.NICs_BE2.Ids}"]
+  VMNICid             = ["${module.NICs_BE_VNet2.Ids}"]
   VMSize              = "${lookup(var.VMSize, 2)}"
-  ASID                = "${module.AS_BE.Id}"
+  ASID                = "${module.AS_BE_VNet2.Id}"
   VMStorageTier       = "${lookup(var.Manageddiskstoragetier, 0)}"
   VMAdminName         = "${var.VMAdminName}"
   VMAdminPassword     = "${var.VMAdminPassword}"
-  DataDiskId          = ["${module.DataDisks_BE2.Ids}"]
-  DataDiskName        = ["${module.DataDisks_BE2.Names}"]
-  DataDiskSize        = ["${module.DataDisks_BE2.Sizes}"]
+  DataDiskId          = ["${module.DataDisks_BE_VNet2.Ids}"]
+  DataDiskName        = ["${module.DataDisks_BE_VNet2.Names}"]
+  DataDiskSize        = ["${module.DataDisks_BE_VNet2.Sizes}"]
   VMPublisherName     = "${lookup(var.PublisherName, 6)}"
   VMOffer             = "${lookup(var.Offer, 6)}"
   VMsku               = "${lookup(var.sku, 6)}"
   DiagnosticDiskURI   = "${module.DiagStorageAccount.PrimaryBlobEP}"
-  CloudinitscriptPath = "./Scripts/telnetclientinstall.ps1"
+  CloudinitscriptPath = "./Scripts/IISinstall.ps1"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "CustomExtensionWinForBE2" {
+module "CustomExtensionWinForBE_VNet2" {
   #Module location
   source = "./Modules/22 CustomExtensionScriptwithtpl"
 
   #Module variables
 
-  AgentName            = "CustomExtensionWinForBE2"
+  AgentCount           = "2"
+  AgentName            = "CustomExtensionWinForBE_VNet2"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
-  VMName               = ["${module.VMs_BE2.Name}"]
+  VMName               = ["${module.VMs_BE_VNet2.Name}"]
   EnvironmentTag       = "${var.EnvironmentTag}"
   EnvironmentUsageTag  = "${var.EnvironmentUsageTag}"
   AgentPublisher       = "microsoft.compute"
@@ -87,15 +126,16 @@ module "CustomExtensionWinForBE2" {
   SettingsTemplatePath = "./Templates/CloudInitWin.tpl"
 }
 
-module "NetworkWatcherAgentForBE2" {
+module "NetworkWatcherAgentForBE_VNet2" {
   #Module Location
   source = "./Modules/21 NetworkwatcheragentWin"
 
   #Module variables
-  AgentName           = "NetworkWatcherAgentForBE2"
+  AgentCount          = "2"
+  AgentName           = "NetworkWatcherAgentForBE_VNet2"
   AgentLocation       = "${var.AzureRegion}"
   AgentRG             = "${module.ResourceGroupInfra.Name}"
-  VMName              = ["${module.VMs_BE2.Name}"]
+  VMName              = ["${module.VMs_BE_VNet2.Name}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
