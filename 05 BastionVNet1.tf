@@ -103,7 +103,7 @@ module "VMs_Bastion_VNet1" {
   VMRG                = "${module.ResourceGroupInfra.Name}"
   VMNICid             = ["${module.NICs_Bastion_VNet1.Ids}"]
   VMSize              = "${lookup(var.VMSize, 1)}"
-  ASID                = "${module.AS_Bastion.Id}"
+  ASID                = "${module.AS_Bastion_VNet1.Id}"
   VMStorageTier       = "${lookup(var.Manageddiskstoragetier, 0)}"
   VMAdminName         = "${var.VMAdminName}"
   VMAdminPassword     = "${var.VMAdminPassword}"

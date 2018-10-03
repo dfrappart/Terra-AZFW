@@ -22,14 +22,14 @@ module "AllowHTTP-HTTPSFromInternetFEVNet2In" {
 }
 
 
-module "Allow8080FromInternettoIISServersVNet1In" {
+module "Allow8080FromInternettoIISServersVNet2In" {
   #Module source
   source = "./Modules/08-3 NSGRule with Dest ASG"
 
   #Module variable
   RGName                      = "${module.ResourceGroupInfra.Name}"
   NSGReference                = "${module.NSG_FE_Subnet_VNet2.Name}"
-  NSGRuleName                 = "Allow8080FromInternettoIISServersVNet1In"
+  NSGRuleName                 = "Allow8080FromInternettoIISServersVNet2In"
   NSGRulePriority             = 103
   NSGRuleDirection            = "Inbound"
   NSGRuleAccess               = "Allow"

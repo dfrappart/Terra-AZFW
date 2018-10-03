@@ -15,7 +15,7 @@ module "FW_Subnet_VNet2" {
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 3)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  vNetName            = "${module.SampleArchi_vNet.Name}"
+  vNetName            = "${module.VNet2.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 8)}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
@@ -23,12 +23,12 @@ module "FW_Subnet_VNet2" {
 
 #UDR for AZ FW
 
-module "RouteTable_Vnet2" {
+module "RouteTable_VNet2" {
   #Module location
   source = "./Modules/17 RouteTable"
 
   #Module variable
-  RouteTableName      = "RouteTabletoAzFW_Vnet2"
+  RouteTableName      = "RouteTabletoAzFW_VNet2"
   RGName              = "${module.ResourceGroupInfra.Name}"
   RTLocation          = "${var.AzureRegion}"
   BGPDisabled         = "false"
@@ -36,14 +36,14 @@ module "RouteTable_Vnet2" {
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
 
-module "Route_Vnet2" {
+module "Route_VNet2" {
   #Module location
   source = "./Modules/16 Route"
 
   #Module variable
   RouteName          = "RoutetoAzFW_Vnet2"
   RGName             = "${module.ResourceGroupInfra.Name}"
-  RTName             = "${module.RouteTable.Name}"
+  RTName             = "${module.RouteTable_VNet2.Name}"
   DestinationCIDR    = "0.0.0.0/0"
   NextHop            = "VirtualAppliance"
   NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[8],4)}"

@@ -128,7 +128,7 @@ module "CustomExtensionWinForBastion_VNet2" {
   AgentName            = "CustomExtensionWinForBastion_VNet2"
   AgentLocation        = "${var.AzureRegion}"
   AgentRG              = "${module.ResourceGroupInfra.Name}"
-  VMName               = ["${module.VMs_Bastion.Name}"]
+  VMName               = ["${module.VMs_Bastion_VNet2.Name}"]
   EnvironmentTag       = "${var.EnvironmentTag}"
   EnvironmentUsageTag  = "${var.EnvironmentUsageTag}"
   AgentPublisher       = "microsoft.compute"
@@ -146,7 +146,7 @@ module "NetworkWatcherAgentForBastion_VNet2" {
   AgentName           = "NetworkWatcherAgentForBastion_VNet2"
   AgentLocation       = "${var.AzureRegion}"
   AgentRG             = "${module.ResourceGroupInfra.Name}"
-  VMName              = ["${module.VMs_Bastion.Name}"]
+  VMName              = ["${module.VMs_Bastion_VNet2.Name}"]
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }

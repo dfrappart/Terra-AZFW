@@ -15,7 +15,7 @@ module "FW_Subnet_VNet1" {
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 3)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  vNetName            = "${module.SampleArchi_vNet.Name}"
+  vNetName            = "${module.VNet1.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 3)}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
@@ -43,7 +43,7 @@ module "Route_Vnet1" {
   #Module variable
   RouteName          = "RoutetoAzFW_Vnet1"
   RGName             = "${module.ResourceGroupInfra.Name}"
-  RTName             = "${module.RouteTable.Name}"
+  RTName             = "${module.RouteTable_VNet1.Name}"
   DestinationCIDR    = "0.0.0.0/0"
   NextHop            = "VirtualAppliance"
   NextHopinIPAddress = "${cidrhost(var.SubnetAddressRange[3],4)}"

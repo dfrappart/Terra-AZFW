@@ -34,7 +34,7 @@ module "Bastion_Subnet_VNet1" {
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 2)}_VNet1"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  vNetName            = "${module.SampleArchi_vNet.Name}"
+  vNetName            = "${module.VNet1.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 2)}"
   NSGid               = "${module.NSG_Bastion_Subnet_VNet1.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"
@@ -68,10 +68,10 @@ module "FE_Subnet_VNet1" {
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 0)}_VNet1"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  vNetName            = "${module.SampleArchi_vNet.Name}"
+  vNetName            = "${module.VNet1.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 0)}"
   NSGid               = "${module.NSG_FE_Subnet_VNet1.Id}"
-  RouteTableId        = "${module.RouteTable.Id}"
+  RouteTableId        = "${module.RouteTable_VNet1.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
@@ -105,10 +105,10 @@ module "BE_Subnet_VNet1" {
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 2)}_VNet1"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  vNetName            = "${module.SampleArchi_vNet.Name}"
+  vNetName            = "${module.VNet1.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 2)}"
   NSGid               = "${module.NSG_BE_Subnet_VNet1.Id}"
-  RouteTableId        = "${module.RouteTable.Id}"
+  RouteTableId        = "${module.RouteTable_VNet1.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 }
@@ -128,7 +128,7 @@ module "GW_Subnet_VNet1" {
   #Module variable
   SubnetName          = "${lookup(var.SubnetName, 4)}"
   RGName              = "${module.ResourceGroupInfra.Name}"
-  vNetName            = "${module.SampleArchi_vNet.Name}"
+  vNetName            = "${module.VNet1.Name}"
   Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 4)}"
   EnvironmentTag      = "${var.EnvironmentTag}"
   EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
