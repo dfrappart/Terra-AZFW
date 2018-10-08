@@ -121,7 +121,7 @@ module "VMs_FE_VNet1" {
   #Module variables
 
   VMCount             = "2"
-  VMName              = "FE_VNet1"
+  VMName              = "FEVNet1"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
   VMNICid             = ["${module.NICs_FE_VNet1.Ids}"]

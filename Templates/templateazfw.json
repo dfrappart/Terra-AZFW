@@ -10,7 +10,7 @@
         },
         "aZFWName": {
             "type": "string",
-            "defaultValue": "AZFWPoc",
+            "defaultValue": "AZFWPocVNet1",
             "metadata": {
               "description": "Azure FW Appliance"
             }

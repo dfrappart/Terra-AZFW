@@ -103,10 +103,10 @@ module "BE_Subnet_VNet1" {
   source = "./Modules/06-3 Subnet with routetable"
 
   #Module variable
-  SubnetName          = "${lookup(var.SubnetName, 2)}_VNet1"
+  SubnetName          = "${lookup(var.SubnetName, 1)}_VNet1"
   RGName              = "${module.ResourceGroupInfra.Name}"
   vNetName            = "${module.VNet1.Name}"
-  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 2)}"
+  Subnetaddressprefix = "${lookup(var.SubnetAddressRange, 1)}"
   NSGid               = "${module.NSG_BE_Subnet_VNet1.Id}"
   RouteTableId        = "${module.RouteTable_VNet1.Id}"
   EnvironmentTag      = "${var.EnvironmentTag}"

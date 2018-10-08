@@ -98,7 +98,7 @@ module "VMs_Bastion_VNet2" {
 
   #Module variables
 
-  VMName              = "Bastion_VNet2"
+  VMName              = "BastionVNet2"
   VMLocation          = "${var.AzureRegion}"
   VMRG                = "${module.ResourceGroupInfra.Name}"
   VMNICid             = ["${module.NICs_Bastion_VNet2.Ids}"]

@@ -1,5 +1,5 @@
 ######################################################
-# This file deploys the base AZure Resource
+# This file deploys the base Azure Resource
 # Resource Group + vNet
 ######################################################
 
