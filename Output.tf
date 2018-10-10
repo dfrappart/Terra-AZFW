@@ -308,6 +308,17 @@ output "GW_SubnetAddressPrefix" {
   value = "${module.GW_Subnet_VNet1.AddressPrefix}"
 }
 
+######################################################
+#AZ FW output
 
+output "AZFW_VNet2IPConfig" {
+  value = "${module.FW_VNet2.IPConfig}"
+}
 
+output "AZFW_VNet2Id" {
+  value = "${module.FW_VNet2.Id}"
+}
 
+output "AZFW_VNet2Name" {
+  value = "${module.FW_VNet2.Name}"
+}
